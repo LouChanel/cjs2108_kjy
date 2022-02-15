@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_kjy.dao.BookDAO">
+	<select id="totRecCnt" resultType="int">
+		select count(*) from book;
+	</select>
+	
+	<select id="getBookList" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<select id="getBoardContent" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book where idx = #{idx};
+	</select>
+	
+	<select id="getPartMain" resultType="com.spring.cjs2108_kjy.vo.PartSubVO">
+		select * from partMain order by partMainCode desc;
+	</select>
+	
+	<select id="getPartSubName" resultType="com.spring.cjs2108_kjy.vo.PartSubVO">
+		select * from partSub where partMainCode = #{partMainCode};
+	</select>
+	
+	<select id="getPartSub" resultType="com.spring.cjs2108_kjy.vo.PartSubVO">
+		select sub.*,main.partMainName as partMainName from partSub sub, partMain main where sub.partMainCode=main.partMainCode order by sub.partSubCode desc;
+	</select>
+	
+	<select id="getPartMainOne" resultType="com.spring.cjs2108_kjy.vo.PartSubVO">
+		select * from partMain where partMainCode = #{partMainCode} or partMainName = #{partMainName};
+	</select>
+	
+	<select id="getPartSubOne" resultType="com.spring.cjs2108_kjy.vo.PartSubVO">
+		select * from partSub where partSubCode = #{vo.partSubCode} or (partMainCode = #{vo.partMainCode} and partSubName = #{vo.partSubName});
+	</select>
+	
+	<select id="getPartOne" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book where substring(bookCode,2,2) = #{partSubCode};
+	</select>
+	
+	<select id="getBookMaxIdx" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book order by idx desc limit 1;
+	</select>
+	
+	<select id="getBookContent" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book where idx = #{idx};
+	</select>
+	
+	<select id="getBookIdx" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book order by idx desc limit 3;
+	</select>
+
+	<select id="getBookIdx2" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book order by idx desc limit 3,3;
+	</select>
+
+	<select id="getBookIdx3" resultType="com.spring.cjs2108_kjy.vo.BookVO">
+		select * from book order by idx desc limit 6,3;
+	</select>
+	
+	<insert id="partMainInput">
+		insert into partMain value (#{vo.partMainCode},#{vo.partMainName});
+	</insert>
+	
+	<insert id="partSubInput">
+		insert into partSub value (#{vo.partMainCode},#{vo.partSubCode},#{vo.partSubName});
+	</insert>
+	
+	<insert id="setBookInput">
+		insert into book value (default,#{vo.bookCode},#{vo.bookName},#{vo.name},#{vo.shop},#{vo.bookDate},#{vo.bookPrice},#{vo.bname},#{vo.bsname},#{vo.content});
+	</insert>
+	
+	<delete id="delPartMain">
+		delete from partMain where partMainCode = #{partMainCode};
+	</delete>
+	
+	<delete id="delPartSub">
+		delete from partSub where partSubCode = #{partSubCode};
+	</delete>
+</mapper>
